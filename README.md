@@ -137,7 +137,7 @@ The backend requires a Convex deployment. After running `pnpm dev:setup` in the 
 For any frontend applications that need to connect to Convex, create a `.env.local` file in the frontend package directory with:
 
 ```bash
-CONVEX_URL=https://woozy-reindeer-79.convex.cloud
+CONVEX_URL=https://your-own-url.convex.cloud
 ```
 
 This allows your frontend applications to connect to the Convex backend and use real-time database functions.
