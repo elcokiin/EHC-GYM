@@ -1,0 +1,23 @@
+{
+  "name": "@ehc-gym/backend",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "convex dev",
+    "dev:setup": "convex dev --configure --until-success"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "exports": {
+    "./lib/*": "./src/lib/*.ts",
+    "./convex/api": "./src/convex/_generated/api.js",
+    "./convex/dataModel": "./src/convex/_generated/dataModel.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "convex": "^1.25.4",
+    "zod": "^4.0.14"
+  }
+}
