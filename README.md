@@ -1,13 +1,78 @@
-# Turborepo starter
+# EHC Gym
 
-This Turborepo starter is maintained by the Turborepo core team.
+A Turborepo for the EHC Gym application with Convex backend.
 
-## Using this example
+## Prerequisites
 
-Run the following command:
+Before getting started, make sure you have the following installed and configured:
 
-```sh
-npx create-turbo@latest
+- **Node.js v20 or higher** - [Download here](https://nodejs.org/)
+- **pnpm** - Install globally with `npm install -g pnpm`
+- **Convex account** - [Create an account](https://convex.dev/) to manage your backend database and functions
+
+## Getting Started
+
+### 1. Clone and Install Dependencies
+
+```bash
+git clone <repository-url>
+cd ehc-gym
+pnpm install
+```
+
+### 2. Initialize Convex Backend
+
+Navigate to the backend package and set up Convex:
+
+```bash
+cd packages/backend
+pnpm dev:setup
+```
+
+This will:
+- Configure your Convex deployment
+- Set up authentication with your Convex account
+- Generate the necessary configuration files
+
+### 3. Start Development
+
+After Convex is configured, you can start the backend in development mode:
+
+```bash
+# From packages/backend directory
+pnpm dev
+```
+
+Or from the root directory:
+
+```bash
+# Start all packages
+pnpm dev
+
+# Start specific package
+pnpm dev --filter=@ehc-gym/backend
+```
+
+## Project Structure
+
+```
+ehc-gym/
+├── packages/
+│   └── backend/                 # Convex backend package
+│       ├── src/
+│       │   └── convex/         # Convex functions and schema
+│       │       ├── _generated/ # Auto-generated Convex files
+│       │       ├── schema.ts   # Database schema definitions
+│       │       ├── tasks.ts    # Task-related functions
+│       │       └── README.md   # Convex functions documentation
+│       ├── package.json        # Backend dependencies and scripts
+│       ├── tsconfig.json       # TypeScript configuration
+│       ├── convex.json         # Convex configuration
+│       └── .env.local         # Local environment variables
+├── apps/                       # Frontend applications (to be added)
+├── packages/                   # Shared packages
+├── README.md                   # This file
+└── package.json               # Root package configuration
 ```
 
 ## What's inside?
@@ -16,11 +81,8 @@ This Turborepo includes the following packages/apps:
 
 ### Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- `@ehc-gym/backend`: Convex backend with database schema and API functions
+- Additional frontend apps and shared packages will be added here
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
@@ -29,107 +91,62 @@ Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 This Turborepo has some additional tools already setup for you:
 
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+- [Convex](https://convex.dev/) for backend database and real-time functions
+- [pnpm](https://pnpm.io/) for fast, disk space efficient package management
 
-### Build
+### Development Commands
 
-To build all apps and packages, run the following command:
+```bash
+# Start all packages in development mode
+pnpm dev
 
-```
-cd my-turborepo
+# Start specific package
+pnpm dev --filter=@ehc-gym/backend
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
+# Build all packages
+pnpm build
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
-
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
+# Build specific package
+pnpm build --filter=@ehc-gym/backend
 ```
 
-### Develop
+### Backend (Convex) Commands
 
-To develop all apps and packages, run the following command:
+```bash
+cd packages/backend
 
-```
-cd my-turborepo
+# Start development server
+pnpm dev
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+# Initial setup with configuration
+pnpm dev:setup
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## Environment Setup
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+### Backend Setup
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
+The backend requires a Convex deployment. After running `pnpm dev:setup` in the backend directory, you'll have:
 
-### Remote Caching
+- A `.env.local` file with your Convex deployment URL
+- Connection to your Convex dashboard for database management
+- Real-time function deployment and testing
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+### Frontend Setup
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+For any frontend applications that need to connect to Convex, create a `.env.local` file in the frontend package directory with:
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+```bash
+CONVEX_URL=https://woozy-reindeer-79.convex.cloud
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
+This allows your frontend applications to connect to the Convex backend and use real-time database functions.
 
 ## Useful Links
 
-Learn more about the power of Turborepo:
+Learn more about the technologies used:
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+- [Turborepo Documentation](https://turborepo.com/docs)
+- [Convex Documentation](https://docs.convex.dev/)
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
+- [pnpm Documentation](https://pnpm.io/motivation)
