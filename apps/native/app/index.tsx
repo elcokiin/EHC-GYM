@@ -19,8 +19,8 @@ export default function Index() {
     );
   }
 
-  // Always redirect to welcome screen first
-  return <Redirect href="/welcome" />;
+  // Always redirect to onBoarding screen first
+  return <Redirect href="/onBoarding" />;
 }
 
 function LoadingComponent() {

@@ -14,6 +14,10 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as tasks from "../tasks.js";
+import type * as user_error from "../user/error.js";
+import type * as user_index from "../user/index.js";
+import type * as user_mutation from "../user/mutation.js";
+import type * as user_query from "../user/query.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -25,6 +29,10 @@ import type * as tasks from "../tasks.js";
  */
 declare const fullApi: ApiFromModules<{
   tasks: typeof tasks;
+  "user/error": typeof user_error;
+  "user/index": typeof user_index;
+  "user/mutation": typeof user_mutation;
+  "user/query": typeof user_query;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

@@ -6,4 +6,15 @@ export default defineSchema({
         text: v.string(),
         completed: v.boolean(),
     }),
+
+    users: defineTable({
+        name: v.string(),
+        last_name: v.string(),
+        email: v.string(),
+        contact_emergency_name: v.string(),
+        contact_emergency_phone: v.string(),
+        birthday: v.string(),
+        phone: v.string(),
+        country_code: v.string(),
+    }),
 });
