@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import { Eye, EyeOff } from 'lucide-react-native';
 import { Input } from './input';
 
@@ -12,7 +12,7 @@ interface PasswordInputProps {
     disabled?: boolean;
 }
 
-export const PasswordInput = React.forwardRef<any, PasswordInputProps>(
+const PasswordInput = React.forwardRef<TextInput, PasswordInputProps>(
     ({ value, onChangeText, placeholder = "••••••••", label, error, disabled = false, ...props }, ref) => {
         const [showPassword, setShowPassword] = useState(false);
 
@@ -62,4 +62,5 @@ const styles = StyleSheet.create({
     },
 });
 
+export { PasswordInput };
 export default PasswordInput;

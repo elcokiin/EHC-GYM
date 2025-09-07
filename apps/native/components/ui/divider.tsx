@@ -7,7 +7,7 @@ interface SeparatorProps {
     orientation?: 'horizontal' | 'vertical';
 }
 
-export const Separator: React.FC<SeparatorProps> = ({
+const Separator: React.FC<SeparatorProps> = ({
     text = 'O',
     orientation = 'horizontal'
 }) => {
@@ -52,4 +52,5 @@ const styles = StyleSheet.create({
     },
 });
 
+export { Separator };
 export default Separator;

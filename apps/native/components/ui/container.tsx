@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ViewProps, Dimensions } from 'react-native';
+import { View, StyleSheet, ViewProps, useWindowDimensions } from 'react-native';
 
 export type ContainerSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 
@@ -11,9 +11,27 @@ interface ContainerProps extends ViewProps {
 
 const Container = React.forwardRef<View, ContainerProps>(
     ({ size = 'full', centered = false, children, style, ...props }, ref) => {
+        const { width: screenWidth } = useWindowDimensions();
+
+        const getSizeStyle = (size: ContainerSize) => {
+            switch (size) {
+                case 'sm':
+                    return { maxWidth: Math.min(screenWidth * 0.8, 640) };
+                case 'md':
+                    return { maxWidth: Math.min(screenWidth * 0.9, 768) };
+                case 'lg':
+                    return { maxWidth: Math.min(screenWidth * 0.95, 1024) };
+                case 'xl':
+                    return { maxWidth: Math.min(screenWidth, 1280) };
+                case 'full':
+                default:
+                    return { maxWidth: screenWidth };
+            }
+        };
+
         const containerStyles = [
             styles.base,
-            styles[`size_${size}`],
+            getSizeStyle(size),
             centered && styles.centered,
             style,
         ];
@@ -28,8 +46,6 @@ const Container = React.forwardRef<View, ContainerProps>(
 
 Container.displayName = 'Container';
 
-const { width: screenWidth } = Dimensions.get('window');
-
 const styles = StyleSheet.create({
     base: {
         width: '100%',
@@ -38,23 +54,6 @@ const styles = StyleSheet.create({
 
     centered: {
         alignSelf: 'center',
-    },
-
-    // Sizes
-    size_sm: {
-        maxWidth: Math.min(screenWidth * 0.8, 640),
-    },
-    size_md: {
-        maxWidth: Math.min(screenWidth * 0.9, 768),
-    },
-    size_lg: {
-        maxWidth: Math.min(screenWidth * 0.95, 1024),
-    },
-    size_xl: {
-        maxWidth: Math.min(screenWidth, 1280),
-    },
-    size_full: {
-        maxWidth: '100%',
     },
 });
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ViewProps, ViewStyle } from 'react-native';
+import { View, StyleSheet, ViewProps, StyleProp, ViewStyle } from 'react-native';
 
 export type CardVariant = 'default' | 'outline' | 'ghost';
 export type CardSize = 'default' | 'sm' | 'lg';
@@ -8,16 +8,17 @@ interface CardProps extends ViewProps {
     variant?: CardVariant;
     size?: CardSize;
     children: React.ReactNode;
+    style?: StyleProp<ViewStyle>;
 }
 
 const Card = React.forwardRef<View, CardProps>(
     ({ variant = 'default', size = 'default', children, style, ...props }, ref) => {
-        const cardStyle: ViewStyle = {
-            ...styles.base,
-            ...styles[variant],
-            ...styles[`size_${size}`],
-            ...(style as ViewStyle),
-        };
+        const cardStyle: StyleProp<ViewStyle> = [
+            styles.base,
+            styles[variant],
+            styles[`size_${size}`],
+            style
+        ];
 
         return (
             <View ref={ref} style={cardStyle} {...props}>

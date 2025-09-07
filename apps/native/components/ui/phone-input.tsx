@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, StyleSheet, TextInput } from 'react-native';
+import { View, StyleSheet, TextInput, TextInputProps } from 'react-native';
 import { Text } from './text';
 
-interface PhoneInputProps {
+interface PhoneInputProps extends TextInputProps {
     value: string;
     onChangeText: (text: string) => void;
     placeholder?: string;
@@ -11,7 +11,7 @@ interface PhoneInputProps {
     disabled?: boolean;
 }
 
-export const PhoneInput = React.forwardRef<any, PhoneInputProps>(
+const PhoneInput = React.forwardRef<TextInput, PhoneInputProps>(
     ({
         value,
         onChangeText,
@@ -19,6 +19,7 @@ export const PhoneInput = React.forwardRef<any, PhoneInputProps>(
         label,
         error,
         disabled = false,
+        style,
         ...props
     }, ref) => {
         return (
@@ -36,7 +37,7 @@ export const PhoneInput = React.forwardRef<any, PhoneInputProps>(
 
                     <TextInput
                         ref={ref}
-                        style={styles.phoneInput}
+                        style={[styles.phoneInput, style]}
                         value={value}
                         onChangeText={onChangeText}
                         placeholder={placeholder}
@@ -68,7 +69,6 @@ const styles = StyleSheet.create({
     phoneContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 10,
     },
     countryCode: {
         flexDirection: 'row',
@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FAFAFA',
         minHeight: 48,
         width: 60,
+        marginRight: 10,
     },
     flag: {
         fontSize: 18,
@@ -103,4 +104,5 @@ const styles = StyleSheet.create({
     },
 });
 
+export { PhoneInput };
 export default PhoneInput;

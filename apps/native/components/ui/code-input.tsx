@@ -5,6 +5,8 @@ import {
     StyleSheet,
     Platform,
     TextInputProps,
+    NativeSyntheticEvent,
+    TextInputKeyPressEventData,
 } from 'react-native';
 
 interface CodeInputProps {
@@ -15,7 +17,7 @@ interface CodeInputProps {
     autoFocus?: boolean;
 }
 
-export const CodeInput = React.forwardRef<View, CodeInputProps>(
+const CodeInput = React.forwardRef<View, CodeInputProps>(
     ({ value, onChangeText, length = 5, disabled = false, autoFocus = false }, ref) => {
         const inputRefs = useRef<(TextInput | null)[]>([]);
 
@@ -43,7 +45,7 @@ export const CodeInput = React.forwardRef<View, CodeInputProps>(
             }
         };
 
-        const handleKeyPress = (e: any, index: number) => {
+        const handleKeyPress = (e: NativeSyntheticEvent<TextInputKeyPressEventData>, index: number) => {
             if (e.nativeEvent.key === 'Backspace' && !value[index] && index > 0) {
                 inputRefs.current[index - 1]?.focus();
             }
@@ -123,4 +125,5 @@ const styles = StyleSheet.create({
     },
 });
 
+export { CodeInput };
 export default CodeInput;

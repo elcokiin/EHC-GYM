@@ -6,7 +6,7 @@ interface SeparatorWithTextProps {
     text: string;
 }
 
-export const SeparatorWithText: React.FC<SeparatorWithTextProps> = ({ text }) => {
+const SeparatorWithText: React.FC<SeparatorWithTextProps> = ({ text }) => {
     return (
         <View style={styles.container}>
             <View style={styles.line} />
@@ -35,4 +35,5 @@ const styles = StyleSheet.create({
     },
 });
 
+export { SeparatorWithText };
 export default SeparatorWithText;

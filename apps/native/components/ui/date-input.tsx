@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, TextInput } from 'react-native';
 import { Calendar } from 'lucide-react-native';
 import { Input } from './input';
 
@@ -12,7 +12,7 @@ interface DateInputProps {
     disabled?: boolean;
 }
 
-export const DateInput = React.forwardRef<any, DateInputProps>(
+const DateInput = React.forwardRef<TextInput, DateInputProps>(
     ({ value, onChangeText, placeholder = "DD/MM/YYYY", label, error, disabled = false, ...props }, ref) => {
         return (
             <Input
@@ -39,4 +39,5 @@ export const DateInput = React.forwardRef<any, DateInputProps>(
 
 DateInput.displayName = 'DateInput';
 
+export { DateInput };
 export default DateInput;

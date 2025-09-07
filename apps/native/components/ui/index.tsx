@@ -35,7 +35,7 @@ export type { StackDirection, StackAlign, StackJustify } from './stack';
 export { Accordion, AccordionItem } from './accordion';
 export type { AccordionVariant } from './accordion';
 
-// Default export for the UI components library
+// Import all components for default export
 import { Button } from './button';
 import { Text } from './text';
 import { Input } from './input';
@@ -50,6 +50,7 @@ import { Container } from './container';
 import { Stack } from './stack';
 import { Accordion, AccordionItem } from './accordion';
 
+// Default export for the main UI components library
 export default {
     Button,
     Text,

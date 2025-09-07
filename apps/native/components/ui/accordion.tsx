@@ -5,7 +5,16 @@ import {
     TouchableOpacity,
     StyleSheet,
     Platform,
+    LayoutChangeEvent,
 } from 'react-native';
+import Animated, {
+    useSharedValue,
+    useAnimatedStyle,
+    withTiming,
+    runOnJS,
+    measure,
+    useAnimatedRef
+} from 'react-native-reanimated';
 
 export type AccordionVariant = 'default' | 'outline' | 'ghost';
 
@@ -22,7 +31,7 @@ interface AccordionItemProps {
 interface AccordionProps {
     variant?: AccordionVariant;
     type?: 'single' | 'multiple';
-    children: React.ReactElement<AccordionItemProps>[];
+    children: React.ReactNode;
 }
 
 const AccordionItem: React.FC<AccordionItemProps> = ({
@@ -33,9 +42,44 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
     onToggle = () => { },
     disabled = false
 }) => {
+    const height = useSharedValue(0);
+    const opacity = useSharedValue(0);
+    const contentHeight = useSharedValue(0);
+    const animatedRef = useAnimatedRef<View>();
+
+    React.useEffect(() => {
+        if (isOpen) {
+            height.value = withTiming(contentHeight.value, { duration: 300 });
+            opacity.value = withTiming(1, { duration: 300 });
+        } else {
+            height.value = withTiming(0, { duration: 300 });
+            opacity.value = withTiming(0, { duration: 300 });
+        }
+    }, [isOpen, height, opacity, contentHeight]);
+
+    const animatedStyle = useAnimatedStyle(() => {
+        return {
+            height: height.value,
+            opacity: opacity.value,
+            overflow: 'hidden',
+        };
+    });
+
+    const chevronAnimatedStyle = useAnimatedStyle(() => ({
+        transform: [{ rotate: withTiming(isOpen ? '180deg' : '0deg', { duration: 300 }) }]
+    }));
+
     const handleToggle = () => {
         if (disabled) return;
         onToggle();
+    };
+
+    const handleContentLayout = (event: LayoutChangeEvent) => {
+        const { height: layoutHeight } = event.nativeEvent.layout;
+        contentHeight.value = layoutHeight;
+        if (isOpen && height.value === 0) {
+            height.value = withTiming(layoutHeight, { duration: 300 });
+        }
     };
 
     return (
@@ -49,16 +93,16 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
                 <Text style={[styles.triggerText, disabled && styles.triggerTextDisabled]}>
                     {title}
                 </Text>
-                <Text style={[styles.chevron, isOpen && styles.chevronOpen]}>
+                <Animated.Text style={[styles.chevron, chevronAnimatedStyle]}>
                     ▼
-                </Text>
+                </Animated.Text>
             </TouchableOpacity>
 
-            {isOpen && (
-                <View style={styles.content}>
+            <Animated.View style={animatedStyle} ref={animatedRef}>
+                <View style={styles.content} onLayout={handleContentLayout}>
                     {children}
                 </View>
-            )}
+            </Animated.View>
         </View>
     );
 };
@@ -93,15 +137,21 @@ const Accordion: React.FC<AccordionProps> = ({
         });
     };
 
+    const validChildren = React.Children.toArray(children).filter(React.isValidElement);
+
     return (
         <View style={[styles.accordion, styles[`accordion_${variant}`]]}>
-            {React.Children.map(children, (child, index) =>
-                React.cloneElement(child, {
-                    variant,
-                    isOpen: openItems.has(index),
-                    onToggle: () => handleItemToggle(index),
-                })
-            )}
+            {validChildren.map((child, index) => {
+                if (React.isValidElement<AccordionItemProps>(child)) {
+                    return React.cloneElement(child, {
+                        key: child.key || index,
+                        variant,
+                        isOpen: openItems.has(index),
+                        onToggle: () => handleItemToggle(index),
+                    });
+                }
+                return child;
+            })}
         </View>
     );
 };
@@ -170,11 +220,6 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: '#6B7280',
         marginLeft: 8,
-        transform: [{ rotate: '0deg' }],
-    },
-
-    chevronOpen: {
-        transform: [{ rotate: '180deg' }],
     },
 
     content: {

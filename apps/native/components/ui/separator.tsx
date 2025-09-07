@@ -12,10 +12,30 @@ interface SeparatorProps extends ViewProps {
 
 const Separator = React.forwardRef<View, SeparatorProps>(
     ({ orientation = 'horizontal', variant = 'default', decorative = true, style, ...props }, ref) => {
+        const getDashedStyle = () => {
+            if (variant !== 'dashed') return {};
+
+            if (orientation === 'horizontal') {
+                return {
+                    backgroundColor: 'transparent',
+                    borderStyle: 'dashed' as const,
+                    borderColor: '#E5E5E5',
+                    borderBottomWidth: 1,
+                };
+            } else {
+                return {
+                    backgroundColor: 'transparent',
+                    borderStyle: 'dashed' as const,
+                    borderColor: '#E5E5E5',
+                    borderLeftWidth: 1,
+                };
+            }
+        };
+
         const separatorStyles = [
             styles.base,
             styles[orientation],
-            styles[variant],
+            variant === 'default' ? styles.default : getDashedStyle(),
             style,
         ];
 
@@ -23,7 +43,9 @@ const Separator = React.forwardRef<View, SeparatorProps>(
             <View
                 ref={ref}
                 style={separatorStyles}
-                {...(decorative ? { 'aria-hidden': true } : {})}
+                accessibilityElementsHidden={decorative}
+                importantForAccessibility={decorative ? 'no-hide-descendants' : 'auto'}
+                accessible={!decorative}
                 {...props}
             />
         );
@@ -50,12 +72,6 @@ const styles = StyleSheet.create({
     // Variants
     default: {
         backgroundColor: '#E5E5E5',
-    },
-    dashed: {
-        backgroundColor: 'transparent',
-        borderStyle: 'dashed',
-        borderColor: '#E5E5E5',
-        borderTopWidth: 1,
     },
 });
 
