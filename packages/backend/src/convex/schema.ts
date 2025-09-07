@@ -16,5 +16,7 @@ export default defineSchema({
         birthday: v.string(),
         phone: v.string(),
         country_code: v.string(),
-    }),
+        clerkId: v.optional(v.string()),
+    }).index("by_email", ["email"])
+        .index("by_clerk_id", ["clerkId"]),
 });

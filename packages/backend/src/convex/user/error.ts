@@ -13,4 +13,9 @@ export class AuthError extends Error {
         super(message);
         this.name = 'AuthError';
     }
+
+    // Add code alias for backwards compatibility
+    get code(): AuthErrorType {
+        return this.type;
+    }
 }

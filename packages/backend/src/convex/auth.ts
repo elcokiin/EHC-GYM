@@ -89,17 +89,36 @@ export async function requirePermission(ctx: QueryCtx | MutationCtx, resourceUse
 export async function getCurrentUserProfile(ctx: QueryCtx | MutationCtx) {
     const identity = await getAuthenticatedUser(ctx);
 
-    if (!identity?.email) {
+    if (!identity) {
         return null;
     }
 
     try {
-        const user = await ctx.db
-            .query("users")
-            .filter((q) => q.eq(q.field("email"), identity.email))
-            .first();
+        // First try to lookup user by clerk ID (subject)
+        if (identity.subject) {
+            const userByClerkId = await ctx.db
+                .query("users")
+                .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+                .first();
 
-        return user;
+            if (userByClerkId) {
+                return userByClerkId;
+            }
+        }
+
+        // Fallback to email lookup if no clerk ID match found
+        if (identity.email) {
+            // Normalize email to lowercase for consistent lookup
+            const normalizedEmail = identity.email.toLowerCase();
+            const userByEmail = await ctx.db
+                .query("users")
+                .withIndex("by_email", (q) => q.eq("email", normalizedEmail))
+                .first();
+
+            return userByEmail;
+        }
+
+        return null;
     } catch (error) {
         throw new AuthError(
             'USER_PROFILE_LOOKUP_FAILED',

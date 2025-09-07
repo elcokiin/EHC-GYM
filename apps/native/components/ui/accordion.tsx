@@ -5,6 +5,7 @@ import {
     TouchableOpacity,
     StyleSheet,
     Platform,
+    LayoutChangeEvent,
 } from 'react-native';
 import Animated, {
     useSharedValue,
@@ -73,7 +74,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         onToggle();
     };
 
-    const handleContentLayout = (event: any) => {
+    const handleContentLayout = (event: LayoutChangeEvent) => {
         const { height: layoutHeight } = event.nativeEvent.layout;
         contentHeight.value = layoutHeight;
         if (isOpen && height.value === 0) {

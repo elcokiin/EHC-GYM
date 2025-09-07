@@ -203,3 +203,4 @@ const styles = StyleSheet.create({
 });
 
 export { Text };
+export default Text;

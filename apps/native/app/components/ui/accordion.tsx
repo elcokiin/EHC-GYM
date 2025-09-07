@@ -5,14 +5,7 @@ import {
     TouchableOpacity,
     StyleSheet,
     Platform,
-    LayoutAnimation,
-    UIManager,
 } from 'react-native';
-
-// Enable LayoutAnimation for Android
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-}
 
 export type AccordionVariant = 'default' | 'outline' | 'ghost';
 
@@ -42,8 +35,6 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 }) => {
     const handleToggle = () => {
         if (disabled) return;
-
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         onToggle();
     };
 
@@ -194,3 +185,4 @@ const styles = StyleSheet.create({
 });
 
 export { Accordion, AccordionItem };
+export default Accordion;

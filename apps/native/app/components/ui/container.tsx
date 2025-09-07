@@ -59,3 +59,4 @@ const styles = StyleSheet.create({
 });
 
 export { Container };
+export default Container;

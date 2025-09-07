@@ -67,51 +67,33 @@ const Button = React.forwardRef<View, ButtonProps>(
         };
 
         const getButtonStyle = (): ViewStyle => {
-            const baseStyle: ViewStyle = { ...styles.base };
+            const base = { ...styles.base } as ViewStyle;
+            const variantStyle = styles[variant] as ViewStyle;
+            const sizeStyle = styles[`size_${size}` as keyof typeof styles] as ViewStyle;
 
-            // Add variant styles
-            Object.assign(baseStyle, styles[variant]);
-
-            // Ensure default variant has the yellow background
-            if (variant === 'default') {
-                baseStyle.backgroundColor = '#FFAF00';
-            }
-
-            // Add size styles
-            Object.assign(baseStyle, styles[`size_${size}` as keyof typeof styles]);
-
-            // Add conditional styles
-            if (fullWidth) {
-                Object.assign(baseStyle, styles.fullWidth);
-            }
-            if (rounded) {
-                Object.assign(baseStyle, styles.rounded);
-            }
-            if (!shadow) {
-                Object.assign(baseStyle, { shadowOpacity: 0, elevation: 0 });
-            }
-            if (disabled) {
-                Object.assign(baseStyle, styles.disabled);
-            }
-
-            return baseStyle;
+            return {
+                ...base,
+                ...(variantStyle || {}),
+                ...(variant === 'default' ? { backgroundColor: '#FFAF00' } : {}),
+                ...(sizeStyle || {}),
+                ...(fullWidth ? styles.fullWidth : {}),
+                ...(rounded ? styles.rounded : {}),
+                ...(!shadow ? { shadowOpacity: 0, elevation: 0 } : {}),
+                ...(disabled ? styles.disabled : {}),
+            };
         };
 
         const getTextStyle = (): TextStyle => {
-            const baseTextStyle = { ...styles.text };
+            const base = { ...styles.text };
+            const variantTextStyle = styles[`text_${variant}` as keyof typeof styles] as TextStyle;
+            const sizeTextStyle = styles[`textSize_${size}` as keyof typeof styles] as TextStyle;
 
-            // Add variant text styles
-            Object.assign(baseTextStyle, styles[`text_${variant}` as keyof typeof styles]);
-
-            // Add size text styles
-            Object.assign(baseTextStyle, styles[`textSize_${size}` as keyof typeof styles]);
-
-            // Add disabled style
-            if (disabled) {
-                Object.assign(baseTextStyle, styles.textDisabled);
-            }
-
-            return baseTextStyle;
+            return {
+                ...base,
+                ...(variantTextStyle || {}),
+                ...(sizeTextStyle || {}),
+                ...(disabled ? styles.textDisabled : {}),
+            };
         };
 
         const getIconSpacing = () => {
@@ -268,7 +250,7 @@ const styles = StyleSheet.create({
 
     // Text styles
     text: {
-        fontWeight: '600' as const,
+        fontWeight: '600' as TextStyle['fontWeight'],
         textAlign: 'center' as const,
         fontFamily: Platform.OS === 'ios' ? 'System' : 'Roboto',
         letterSpacing: 0.3,
@@ -290,7 +272,7 @@ const styles = StyleSheet.create({
     text_outline: {
         color: '#27272A',
         fontSize: 20,
-        fontWeight: '500',
+        fontWeight: '500' as TextStyle['fontWeight'],
     },
     text_secondary: {
         color: '#6B7280',
@@ -306,19 +288,19 @@ const styles = StyleSheet.create({
     // Text sizes
     textSize_xs: {
         fontSize: 12,
-        fontWeight: '500' as const,
+        fontWeight: '500' as TextStyle['fontWeight'],
     },
     textSize_sm: {
         fontSize: 14,
-        fontWeight: '500' as const,
+        fontWeight: '500' as TextStyle['fontWeight'],
     },
     textSize_default: {
         fontSize: 20,
-        fontWeight: '700' as const,
+        fontWeight: '700' as TextStyle['fontWeight'],
     },
     textSize_lg: {
         fontSize: 24,
-        fontWeight: '700' as const,
+        fontWeight: '700' as TextStyle['fontWeight'],
     },
     textSize_icon: {
         fontSize: 16,

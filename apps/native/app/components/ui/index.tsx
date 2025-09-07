@@ -34,3 +34,38 @@ export type { StackDirection, StackAlign, StackJustify } from './stack';
 
 export { Accordion, AccordionItem } from './accordion';
 export type { AccordionVariant } from './accordion';
+
+// Default export for the UI components library
+import { Button } from './button';
+import { Text } from './text';
+import { Input } from './input';
+import { PasswordInput } from './password-input';
+import { CodeInput } from './code-input';
+import { DateInput } from './date-input';
+import { PhoneInput } from './phone-input';
+import { Card, CardHeader, CardContent, CardFooter } from './card';
+import { Separator } from './separator';
+import { SeparatorWithText } from './separator-with-text';
+import { Container } from './container';
+import { Stack } from './stack';
+import { Accordion, AccordionItem } from './accordion';
+
+export default {
+    Button,
+    Text,
+    Input,
+    PasswordInput,
+    CodeInput,
+    DateInput,
+    PhoneInput,
+    Card,
+    CardHeader,
+    CardContent,
+    CardFooter,
+    Separator,
+    SeparatorWithText,
+    Container,
+    Stack,
+    Accordion,
+    AccordionItem,
+};

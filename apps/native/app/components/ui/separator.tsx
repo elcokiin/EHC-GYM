@@ -60,3 +60,4 @@ const styles = StyleSheet.create({
 });
 
 export { Separator };
+export default Separator;

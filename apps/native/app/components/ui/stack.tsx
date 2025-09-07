@@ -115,3 +115,4 @@ const styles = StyleSheet.create({
 });
 
 export { Stack };
+export default Stack;
