@@ -10,6 +10,8 @@ export type { InputSize, InputVariant } from './input';
 
 export { PasswordInput } from './password-input';
 
+export { CodeInput } from './code-input';
+
 export { DateInput } from './date-input';
 
 export { PhoneInput } from './phone-input';

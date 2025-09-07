@@ -1,7 +1,12 @@
 import { useSignIn } from '@clerk/clerk-expo'
 import { Link, useRouter } from 'expo-router'
-import { Text, TextInput, TouchableOpacity, View, Alert } from 'react-native'
+import { View, Alert, ScrollView, TouchableOpacity, StyleSheet } from 'react-native'
 import React from 'react'
+import { ChevronLeft } from 'lucide-react-native'
+import { Container } from '../components/ui/container'
+import { Text } from '../components/ui/text'
+import { Input } from '../components/ui/input'
+import { Button } from '../components/ui/button'
 
 export default function ForgotPasswordPage() {
     const { signIn, isLoaded } = useSignIn()
@@ -13,6 +18,12 @@ export default function ForgotPasswordPage() {
     // Handle the submission of the forgot password form
     const onForgotPasswordPress = async () => {
         if (!isLoaded) return
+
+        if (!emailAddress) {
+            Alert.alert('Error', 'Por favor ingresa tu correo electrónico')
+            return
+        }
+
         setLoading(true)
 
         try {
@@ -28,7 +39,7 @@ export default function ForgotPasswordPage() {
                 params: { email: emailAddress }
             })
         } catch (err: any) {
-            Alert.alert('Error', err.errors?.[0]?.message || 'An error occurred while sending reset code')
+            Alert.alert('Error', err.errors?.[0]?.message || 'Error al enviar el código')
             console.error(JSON.stringify(err, null, 2))
         } finally {
             setLoading(false)
@@ -36,53 +47,117 @@ export default function ForgotPasswordPage() {
     }
 
     return (
-        <View style={{ padding: 20 }}>
-            <Text style={{ fontSize: 24, marginBottom: 10 }}>¿Olvidaste tu contraseña?</Text>
-            <Text style={{
-                fontSize: 16,
-                color: '#666',
-                marginBottom: 30,
-                lineHeight: 22
-            }}>
-                Ingresa tu correo electrónico y te enviaremos un código para restablecer tu contraseña.
-            </Text>
+        <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
+            <Container size="md" centered>
+                <View style={styles.content}>
+                    <View style={styles.header}>
+                        <TouchableOpacity
+                            style={styles.backButton}
+                            onPress={() => router.back()}
+                            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                        >
+                            <ChevronLeft size={24} color="#000" />
+                        </TouchableOpacity>
+                    </View>
 
-            <TextInput
-                style={{
-                    borderWidth: 1,
-                    borderColor: '#ccc',
-                    padding: 10,
-                    marginBottom: 20,
-                    borderRadius: 5
-                }}
-                autoCapitalize="none"
-                value={emailAddress}
-                placeholder="Ingresa tu correo electrónico"
-                onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
-                keyboardType="email-address"
-            />
+                    <View style={styles.titleContainer}>
+                        <Text variant="h2" weight="bold" align="left">
+                            Olvidaste tu contraseña
+                        </Text>
+                        <Text variant="p" color="secondary" style={styles.subtitle}>
+                            Por favor ingresa tu correo electrónico para cambiar tu contraseña
+                        </Text>
+                    </View>
 
-            <TouchableOpacity
-                style={{
-                    backgroundColor: loading ? '#ccc' : '#007AFF',
-                    padding: 15,
-                    borderRadius: 5,
-                    marginBottom: 20
-                }}
-                onPress={onForgotPasswordPress}
-                disabled={loading || !emailAddress}
-            >
-                <Text style={{ color: 'white', textAlign: 'center' }}>
-                    {loading ? 'Enviando...' : 'Enviar código'}
-                </Text>
-            </TouchableOpacity>
+                    <View style={styles.form}>
+                        <Input
+                            label="Correo electrónico"
+                            value={emailAddress}
+                            onChangeText={setEmailAddress}
+                            placeholder="contact@discodetech.com"
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                            autoComplete="email"
+                        />
 
-            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: 5 }}>
-                <Text>¿Recordaste tu contraseña?</Text>
-                <Link href="./sign-in">
-                    <Text style={{ color: '#007AFF' }}>Iniciar sesión</Text>
-                </Link>
-            </View>
-        </View>
+                        <Button
+                            onPress={onForgotPasswordPress}
+                            loading={loading}
+                            disabled={!emailAddress}
+                            fullWidth
+                            style={styles.primaryButton}
+                        >
+                            Cambiar Contraseña
+                        </Button>
+
+                        <View style={styles.linkContainer}>
+                            <Text variant="p" color="secondary">
+                                ¿Recordaste tu contraseña?{' '}
+                            </Text>
+                            <Link href="./sign-in" asChild>
+                                <TouchableOpacity>
+                                    <Text variant="p" color="accent" weight="medium">
+                                        Iniciar sesión
+                                    </Text>
+                                </TouchableOpacity>
+                            </Link>
+                        </View>
+                    </View>
+                </View>
+            </Container>
+        </ScrollView>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#FFFFFF',
+    },
+    scrollContent: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        paddingVertical: 40,
+    },
+    content: {
+        flex: 1,
+        justifyContent: 'center',
+        paddingHorizontal: 24,
+        paddingVertical: 20,
+        minHeight: '80%',
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 40,
+        height: 40,
+    },
+    backButton: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: '#F8F9FA',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    titleContainer: {
+        marginBottom: 40,
+    },
+    subtitle: {
+        marginTop: 12,
+        lineHeight: 22,
+    },
+    form: {
+        gap: 20,
+    },
+    primaryButton: {
+        marginTop: 20,
+    },
+    linkContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20,
+        paddingVertical: 12,
+    },
+})
