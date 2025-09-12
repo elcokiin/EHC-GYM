@@ -1,4 +1,5 @@
-type AuthErrorType =
+// src/convex/lib/errors.ts
+export type AuthErrorType =
     | 'USER_CREATION_FAILED'
     | 'USER_LOOKUP_FAILED'
     | 'INVALID_CREDENTIALS'
@@ -6,15 +7,18 @@ type AuthErrorType =
     | 'UNAUTHORIZED'
     | 'FORBIDDEN'
     | 'USER_PROFILE_LOOKUP_FAILED'
-    | 'USER_PROFILE_NOT_FOUND';
+    | 'USER_PROFILE_NOT_FOUND'
+    | 'RBAC_NOT_CONFIGURED';
 
 export class AuthError extends Error {
-    constructor(public readonly type: AuthErrorType, message: string, public readonly cause?: unknown) {
+    constructor(
+        public readonly type: AuthErrorType,
+        message: string,
+        public readonly cause?: unknown
+    ) {
         super(message);
         this.name = 'AuthError';
     }
-
-    // Add code alias for backwards compatibility
     get code(): AuthErrorType {
         return this.type;
     }

@@ -1,4 +1,4 @@
-import { v } from "convex/values";
+/*import { v } from "convex/values";
 import { query } from "../_generated/server";
 import { AuthError } from "./error";
 
@@ -83,4 +83,4 @@ export const searchUsersByName = query({
             );
         }
     },
-});
+});*/
